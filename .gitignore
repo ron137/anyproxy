@@ -29,7 +29,6 @@ build/Release
 node_modules
 .lock-wscript
 temp
-dist
 test/report
 *.tgz
 doc_compiled.md
