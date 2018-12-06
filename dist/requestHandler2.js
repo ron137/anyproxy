@@ -532,6 +532,7 @@ function getConnectReqHandler(userRule, recorder, httpsServerMgr) {
     reqHandlerCtx.conns = new Map();
     reqHandlerCtx.cltSockets = new Map();
     return function (req, cltSocket, head) {
+        cltSocket._connectReq = req;
         var host = req.url.split(':')[0], targetPort = req.url.split(':')[1];
         var shouldIntercept;
         var interceptWsRequest = false;
