@@ -532,6 +532,15 @@ function getConnectReqHandler(userRule, recorder, httpsServerMgr) {
     reqHandlerCtx.conns = new Map();
     reqHandlerCtx.cltSockets = new Map();
     return function (req, cltSocket, head) {
+        if (!req.headers['proxy-authorization']) { // here you can add check for any username/password, I just check that this header must exist!
+          cltSocket.write([
+            'HTTP/1.1 407 Proxy Authentication Required',
+            'Proxy-Authenticate: Basic',
+            'Proxy-Connection: close',
+          ].join('\r\n'))
+          cltSocket.end('\r\n\r\n')  // empty body
+          return
+        }
         cltSocket._connectReq = req;
         var host = req.url.split(':')[0], targetPort = req.url.split(':')[1];
         var shouldIntercept;
