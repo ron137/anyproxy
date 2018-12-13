@@ -541,7 +541,7 @@ function getConnectReqHandler(userRule, recorder, httpsServerMgr) {
           cltSocket.end('\r\n\r\n')  // empty body
           return
         }
-        cltSocket._connectReq = req;
+        cltSocket._connectHeaders = req.headers;
         var host = req.url.split(':')[0], targetPort = req.url.split(':')[1];
         var shouldIntercept;
         var interceptWsRequest = false;
