@@ -532,7 +532,8 @@ function getConnectReqHandler(userRule, recorder, httpsServerMgr) {
     reqHandlerCtx.conns = new Map();
     reqHandlerCtx.cltSockets = new Map();
     return function (req, cltSocket, head) {
-        if (!req.headers['proxy-authorization']) { // here you can add check for any username/password, I just check that this header must exist!
+        var proxyAuthHeader = req.headers['proxy-authorization'] || req.headers['Proxy-Authorization']
+        if (!proxyAuthHeader) { // here you can add check for any username/password, I just check that this header must exist!
           cltSocket.write([
             'HTTP/1.1 407 Proxy Authentication Required',
             'Proxy-Authenticate: Basic',
@@ -651,7 +652,7 @@ function getConnectReqHandler(userRule, recorder, httpsServerMgr) {
                 return interceptWsRequest ? localHttpServer : originServer;
             }
             else {
-                return httpsServerMgr.getSharedHttpsServer(host).then(function (serverInfo) { return ({ host: serverInfo.host, port: serverInfo.port }); });
+                return httpsServerMgr.getSharedHttpsServer(host, proxyAuthHeader).then(serverInfo => ({ host: serverInfo.host, port: serverInfo.port }));
             }
         })
             .then(function (serverInfo) {

@@ -137,7 +137,7 @@ var httpsServerMgr = /** @class */ (function () {
         this.handler = config.handler;
         this.wsHandler = config.wsHandler;
     }
-    httpsServerMgr.prototype.getSharedHttpsServer = function (hostname) {
+    httpsServerMgr.prototype.getSharedHttpsServer = function (hostname, proxyAuth) {
         // ip address will have a unique name
         var finalHost = util.isIpDomain(hostname) ? hostname : this.instanceDefaultHost;
         var self = this;
@@ -146,6 +146,11 @@ var httpsServerMgr = /** @class */ (function () {
             co(util.getFreePort)
                 .then(co.wrap(function (port) {
                 var httpsServer, result;
+                var handler = function(req, res){
+                    req.proxyAuth = proxyAuth;
+                    self.handler(req, res);
+                };
+
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -155,14 +160,14 @@ var httpsServerMgr = /** @class */ (function () {
                             return [4 /*yield*/, createIPHttpsServer({
                                     ip: hostname,
                                     port: port,
-                                    handler: self.handler
+                                    handler: handler
                                 })];
                         case 1:
                             httpsServer = _a.sent();
                             return [3 /*break*/, 4];
                         case 2: return [4 /*yield*/, createHttpsServer({
                                 port: port,
-                                handler: self.handler
+                                handler: handler
                             })];
                         case 3:
                             httpsServer = _a.sent();
@@ -191,7 +196,7 @@ var httpsServerMgr = /** @class */ (function () {
         return new Promise(function (resolve, reject) {
             // each ip address will gain a unit task name,
             // while the domain address will share a common task name
-            self.httpsAsyncTask.addTask("createHttpsServer-" + finalHost, prepareServer, function (error, serverInfo) {
+            self.httpsAsyncTask.addTask("createHttpsServer-" + proxyAuth + '-' + finalHost, prepareServer, function (error, serverInfo) {
                 if (error) {
                     reject(error);
                 }
