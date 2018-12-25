@@ -396,4 +396,5 @@ module.exports.ProxyWebServer = WebInterface;
 module.exports.utils = {
     systemProxyMgr: require('./systemProxyMgr'),
     certMgr: certMgr,
+    getAnyProxyPath: util.getAnyProxyPath
 };
