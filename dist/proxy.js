@@ -98,8 +98,8 @@ var ProxyCore = /** @class */ (function (_super) {
         else if (_this.proxyType === T_TYPE_HTTPS && !config.hostname) {
             throw new Error('hostname is required in https proxy');
         }
-        else if (!_this.proxyPort) {
-            throw new Error('proxy port is required');
+        // else if (!_this.proxyPort) {
+        //     throw new Error('proxy port is required');
         }
         else if (!_this.recorder) {
             throw new Error('recorder is required');
@@ -210,7 +210,9 @@ var ProxyCore = /** @class */ (function (_super) {
             },
             //start proxy server
             function (callback) {
-                self.httpProxyServer.listen(self.proxyPort);
+                if (this.proxyPort) {
+                   self.httpProxyServer.listen(self.proxyPort);
+                }
                 callback(null);
             },
         ], 

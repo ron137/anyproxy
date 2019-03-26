@@ -82,8 +82,8 @@ class ProxyCore extends events.EventEmitter {
       throw new Error('root CA not found. Please run `anyproxy-ca` to generate one first.');
     } else if (this.proxyType === T_TYPE_HTTPS && !config.hostname) {
       throw new Error('hostname is required in https proxy');
-    } else if (!this.proxyPort) {
-      throw new Error('proxy port is required');
+    // } else if (!this.proxyPort) {
+    //   throw new Error('proxy port is required');
     } else if (!this.recorder) {
       throw new Error('recorder is required');
     } else if (config.forceProxyHttps && config.rule && config.rule.beforeDealHttpsRequest) {
@@ -202,7 +202,9 @@ class ProxyCore extends events.EventEmitter {
 
         //start proxy server
         function (callback) {
-          self.httpProxyServer.listen(self.proxyPort);
+          if (this.proxyPort) {
+            self.httpProxyServer.listen(self.proxyPort);
+          }
           callback(null);
         },
       ],
