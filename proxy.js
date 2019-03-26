@@ -4,6 +4,7 @@ const http = require('http'),
   https = require('https'),
   async = require('async'),
   color = require('colorful'),
+  sticky = require('sticky-session'),
   certMgr = require('./lib/certMgr'),
   Recorder = require('./lib/recorder'),
   logUtil = require('./lib/log'),
@@ -13,6 +14,7 @@ const http = require('http'),
   WebInterface = require('./lib/webInterface'),
   wsServerMgr = require('./lib/wsServerMgr'),
   ThrottleGroup = require('stream-throttle').ThrottleGroup;
+
 
 // const memwatch = require('memwatch-next');
 
@@ -202,7 +204,7 @@ class ProxyCore extends events.EventEmitter {
 
         //start proxy server
         function (callback) {
-          self.httpProxyServer.listen(self.proxyPort);
+          sticky.listen(self.httpProxyServer,self.proxyPort);
           callback(null);
         },
       ],
