@@ -202,7 +202,7 @@ class ProxyCore extends events.EventEmitter {
 
         //start proxy server
         function (callback) {
-          if (this.proxyPort) {
+          if (self.proxyPort) {
             self.httpProxyServer.listen(self.proxyPort);
           }
           callback(null);
