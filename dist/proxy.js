@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var http = require('http'), https = require('https'), async = require('async'), color = require('colorful'), sticky = require('sticky-session'), certMgr = require('./certMgr'), Recorder = require('./recorder'), logUtil = require('./log'), util = require('./util'), events = require('events'), co = require('co'), WebInterface = require('./webInterface'), wsServerMgr = require('./wsServerMgr'), ThrottleGroup = require('stream-throttle').ThrottleGroup;
+var http = require('http'), https = require('https'), async = require('async'), color = require('colorful'), certMgr = require('./certMgr'), Recorder = require('./recorder'), logUtil = require('./log'), util = require('./util'), events = require('events'), co = require('co'), WebInterface = require('./webInterface'), wsServerMgr = require('./wsServerMgr'), ThrottleGroup = require('stream-throttle').ThrottleGroup;
 // const memwatch = require('memwatch-next');
 // setInterval(() => {
 //   console.log(process.memoryUsage());
@@ -210,7 +210,7 @@ var ProxyCore = /** @class */ (function (_super) {
             },
             //start proxy server
             function (callback) {
-                sticky.listen(self.httpProxyServer,self.proxyPort);
+                self.httpProxyServer.listen(self.proxyPort);
                 callback(null);
             },
         ], 
