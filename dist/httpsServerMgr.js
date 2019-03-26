@@ -173,10 +173,10 @@ var httpsServerMgr = /** @class */ (function () {
                             httpsServer = _a.sent();
                             _a.label = 4;
                         case 4:
-                            wsServerMgr.getWsServer({
-                                server: httpsServer,
-                                connHandler: self.wsHandler
-                            });
+                            // wsServerMgr.getWsServer({
+                            //     server: httpsServer,
+                            //     connHandler: self.wsHandler
+                            // });
                             httpsServer.on('upgrade', function (req, cltSocket, head) {
                                 logUtil.debug('will let WebSocket server to handle the upgrade event');
                             });

@@ -198,10 +198,10 @@ var ProxyCore = /** @class */ (function (_super) {
                 callback(null);
             },
             function (callback) {
-                wsServerMgr.getWsServer({
-                    server: self.httpProxyServer,
-                    connHandler: self.requestHandler.wsHandler
-                });
+                // wsServerMgr.getWsServer({
+                //     server: self.httpProxyServer,
+                //     connHandler: self.requestHandler.wsHandler
+                // });
                 // remember all sockets, so we can destory them when call the method 'close';
                 self.httpProxyServer.on('connection', function (socket) {
                     self.handleExistConnections.call(self, socket);
