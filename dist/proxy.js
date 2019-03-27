@@ -85,6 +85,7 @@ var ProxyCore = /** @class */ (function (_super) {
         config = config || {};
         _this.status = PROXY_STATUS_INIT;
         _this.proxyPort = config.port;
+        _this.httpProxyServer = config.httpProxyServer;
         _this.proxyType = /https/i.test(config.type || DEFAULT_TYPE) ? T_TYPE_HTTPS : T_TYPE_HTTP;
         _this.proxyHostName = config.hostname || 'localhost';
         _this.recorder = config.recorder;
@@ -108,7 +109,7 @@ var ProxyCore = /** @class */ (function (_super) {
             logUtil.printLog('both "-i(--intercept)" and rule.beforeDealHttpsRequest are specified, the "-i" option will be ignored.', logUtil.T_WARN);
             config.forceProxyHttps = false;
         }
-        _this.httpProxyServer = null;
+        // _this.httpProxyServer = null;
         _this.requestHandler = null;
         // copy the rule to keep the original proxyRule independent
         _this.proxyRule = config.rule || {};
@@ -173,6 +174,10 @@ var ProxyCore = /** @class */ (function (_super) {
         async.series([
             //creat proxy server
             function (callback) {
+                if(self.httpProxyServer){
+                    self.httpProxyServer.on('request', self.requestHandler.userRequestHandler);
+                    return callback(null)
+                }
                 if (self.proxyType === T_TYPE_HTTPS) {
                     certMgr.getCertificate(self.proxyHostName, function (err, keyContent, crtContent) {
                         if (err) {

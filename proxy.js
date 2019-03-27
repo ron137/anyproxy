@@ -71,6 +71,7 @@ class ProxyCore extends events.EventEmitter {
 
     this.status = PROXY_STATUS_INIT;
     this.proxyPort = config.port;
+    this.httpProxyServer = config.httpProxyServer;
     this.proxyType = /https/i.test(config.type || DEFAULT_TYPE) ? T_TYPE_HTTPS : T_TYPE_HTTP;
     this.proxyHostName = config.hostname || 'localhost';
     this.recorder = config.recorder;
@@ -91,7 +92,7 @@ class ProxyCore extends events.EventEmitter {
       config.forceProxyHttps = false;
     }
 
-    this.httpProxyServer = null;
+    // this.httpProxyServer = null;
     this.requestHandler = null;
 
     // copy the rule to keep the original proxyRule independent
@@ -163,6 +164,10 @@ class ProxyCore extends events.EventEmitter {
       [
         //creat proxy server
         function (callback) {
+          if(self.httpProxyServer){
+            self.httpProxyServer.on('request', self.requestHandler.userRequestHandler);
+            return callback(null)
+          }
           if (self.proxyType === T_TYPE_HTTPS) {
             certMgr.getCertificate(self.proxyHostName, (err, keyContent, crtContent) => {
               if (err) {
