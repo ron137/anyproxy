@@ -278,7 +278,7 @@ function getUserReqHandler(userRule, recorder) {
         */
         var host = req.headers.host;
         var protocol = (!!req.connection.encrypted && !(/^http:/).test(req.url)) ? 'https' : 'http';
-        var fullUrl = protocol === 'http' ? req.url : (protocol + '://' + host + req.url);
+        var fullUrl = (protocol === 'http' || (/^https:/).test(req.url)) ? req.url : (protocol + '://' + host + req.url);
         var urlPattern = url.parse(fullUrl);
         var path = urlPattern.path;
         var chunkSizeThreshold = DEFAULT_CHUNK_COLLECT_THRESHOLD;
