@@ -20,7 +20,7 @@
     "component-emitter": "^1.2.1",
     "compression": "^1.4.4",
     "es6-promise": "^3.3.1",
-    "express": "^4.8.5",
+    "express": "^4.16.4",
     "fast-json-stringify": "^0.17.0",
     "iconv-lite": "^0.4.6",
     "inquirer": "^5.2.0",
