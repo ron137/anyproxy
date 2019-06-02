@@ -261,7 +261,11 @@ function getFreePort() {
     return new Promise(function (resolve, reject) {
         var server = require('net').createServer();
         server.unref();
-        server.on('error', reject);
+        server.on('error', function(){
+            getFreePort().then(function(port){
+                resolve(port)
+            });
+        });
         server.listen(0, function () {
             var port = server.address().port;
             server.close(function () {
