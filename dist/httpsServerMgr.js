@@ -140,6 +140,7 @@ var httpsServerMgr = /** @class */ (function () {
     httpsServerMgr.prototype.getSharedHttpsServer = function (hostname, proxyAuth) {
         // ip address will have a unique name
         var finalHost = util.isIpDomain(hostname) ? hostname : this.instanceDefaultHost;
+        var taskName = "createHttpsServer-" + finalHost + '-' + proxyAuth
         var self = this;
         function prepareServer(callback) {
             var instancePort;
@@ -173,6 +174,13 @@ var httpsServerMgr = /** @class */ (function () {
                             httpsServer = _a.sent();
                             _a.label = 4;
                         case 4:
+
+                            //Delete server after 120 seconds
+                            setTimeout(function(){
+                                self.httpsAsyncTask.removeTask(taskName)
+                                httpsServer.close()
+                            },120000)
+
                             // wsServerMgr.getWsServer({
                             //     server: httpsServer,
                             //     connHandler: self.wsHandler
@@ -196,7 +204,7 @@ var httpsServerMgr = /** @class */ (function () {
         return new Promise(function (resolve, reject) {
             // each ip address will gain a unit task name,
             // while the domain address will share a common task name
-            self.httpsAsyncTask.addTask("createHttpsServer-" + proxyAuth + '-' + finalHost, prepareServer, function (error, serverInfo) {
+            self.httpsAsyncTask.addTask(taskName, prepareServer, function (error, serverInfo) {
                 if (error) {
                     reject(error);
                 }
