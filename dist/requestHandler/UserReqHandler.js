@@ -321,26 +321,26 @@ var UserReqHandler = /** @class */ (function () {
         // fetch complete request data
         co(fetchReqData)
             .then(prepareRequestDetail)
-            .then(function () {
-            // record request info
-            if (_this.recorder) {
-                resourceInfo = {
-                    host: host,
-                    method: req.method,
-                    path: path,
-                    protocol: protocol,
-                    url: protocol + '://' + host + path,
-                    req: req,
-                    startTime: new Date().getTime()
-                };
-                resourceInfoId = _this.recorder.appendRecord(resourceInfo);
-            }
-            try {
-                resourceInfo.reqBody = reqData.toString(); //TODO: deal reqBody in webInterface.js
-                _this.recorder && _this.recorder.updateRecord(resourceInfoId, resourceInfo);
-            }
-            catch (e) { }
-        })
+        //     .then(function () {
+        //     // record request info
+        //     if (_this.recorder) {
+        //         resourceInfo = {
+        //             host: host,
+        //             method: req.method,
+        //             path: path,
+        //             protocol: protocol,
+        //             url: protocol + '://' + host + path,
+        //             req: req,
+        //             startTime: new Date().getTime()
+        //         };
+        //         resourceInfoId = _this.recorder.appendRecord(resourceInfo);
+        //     }
+        //     try {
+        //         resourceInfo.reqBody = reqData.toString(); //TODO: deal reqBody in webInterface.js
+        //         _this.recorder && _this.recorder.updateRecord(resourceInfoId, resourceInfo);
+        //     }
+        //     catch (e) { }
+        // })
             // invoke rule before sending request
             .then(co.wrap(function () {
             var userModifiedInfo, finalReqDetail;
