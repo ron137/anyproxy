@@ -83,8 +83,8 @@ class ProxyCore extends events.EventEmitter {
       throw new Error('root CA not found. Please run `anyproxy-ca` to generate one first.');
     } else if (this.proxyType === T_TYPE_HTTPS && !config.hostname) {
       throw new Error('hostname is required in https proxy');
-    // } else if (!this.proxyPort) {
-    //   throw new Error('proxy port is required');
+    } else if (!this.proxyPort && !this.httpProxyServer) {
+      throw new Error('proxy port or http proxy server is required');
     } else if (!this.recorder) {
       throw new Error('recorder is required');
     } else if (config.forceProxyHttps && config.rule && config.rule.beforeDealHttpsRequest) {
@@ -92,7 +92,6 @@ class ProxyCore extends events.EventEmitter {
       config.forceProxyHttps = false;
     }
 
-    // this.httpProxyServer = null;
     this.requestHandler = null;
 
     // copy the rule to keep the original proxyRule independent
@@ -164,7 +163,7 @@ class ProxyCore extends events.EventEmitter {
       [
         //creat proxy server
         function (callback) {
-          if(self.httpProxyServer){
+          if (self.httpProxyServer) {
             self.httpProxyServer.on('request', self.requestHandler.userRequestHandler);
             return callback(null)
           }
@@ -194,10 +193,10 @@ class ProxyCore extends events.EventEmitter {
         },
 
         function (callback) {
-          // wsServerMgr.getWsServer({
-          //   server: self.httpProxyServer,
-          //   connHandler: self.requestHandler.wsHandler
-          // });
+          wsServerMgr.getWsServer({
+            server: self.httpProxyServer,
+            connHandler: self.requestHandler.wsHandler
+          });
           // remember all sockets, so we can destory them when call the method 'close';
           self.httpProxyServer.on('connection', (socket) => {
             self.handleExistConnections.call(self, socket);
@@ -278,7 +277,7 @@ class ProxyCore extends events.EventEmitter {
         for (const cltSocketItem of this.requestHandler.cltSockets) {
           const key = cltSocketItem[0];
           const cltSocket = cltSocketItem[1];
-          logUtil.printLog(`endding https cltSocket : ${key}`);
+          logUtil.printLog(`closing https cltSocket : ${key}`);
           cltSocket.end();
         }
 
